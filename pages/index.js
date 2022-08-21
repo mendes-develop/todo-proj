@@ -1,19 +1,13 @@
 // consumir a nossa api que esta na porta 3000
 import { useState, useEffect } from 'react';
-// GET
-// POST
-// PUT/PATCH
-// DELETE
-
-//
+import { getTodos } from '../API/get';
+import { patchTodo } from '../API/patch';
 
 export default function ToDoList() {
 	const [todos, setTodos] = useState([]);
 
 	async function lerDaApi() {
-		const response = await fetch('http://localhost:3000/todos');
-		const todoListArray = await response.json();
-
+		const todoListArray = await getTodos();
 		setTodos(todoListArray);
 	}
 
@@ -38,11 +32,16 @@ export default function ToDoList() {
 									const id = todoInfo.id;
 									const isCompleted = !todoInfo.completed;
 
-									await fetch(`http://localhost:3000/todos/${id}`, {
-										method: 'PATCH',
-										headers: { 'Content-Type': 'application/json' },
-										body: JSON.stringify({ completed: isCompleted }),
-									});
+									// await fetch(`http://localhost:3000/todos/${id}`, {
+									// 	method: 'PATCH',
+									// 	headers: { 'Content-Type': 'application/json' },
+									// 	body: JSON.stringify({ completed: isCompleted }),
+									// });
+
+									await patchTodo({
+										id: id,
+										completed: isCompleted
+									})
 
 									lerDaApi();
 								}}
